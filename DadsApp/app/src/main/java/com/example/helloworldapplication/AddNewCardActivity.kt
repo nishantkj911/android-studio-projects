@@ -3,10 +3,10 @@ package com.example.helloworldapplication
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_add_new_card.*
 import java.util.*
@@ -15,8 +15,8 @@ class AddNewCardActivity : AppCompatActivity() {
 
     private var dateSetListenerValidFrom: DatePickerDialog.OnDateSetListener? = null
     private var dateSetListenerValidThru: DatePickerDialog.OnDateSetListener? = null
-    private var dateFrom : GregorianCalendar? = null
-    private var dateThru : GregorianCalendar? = null
+    private var dateFrom: GregorianCalendar? = null
+    private var dateThru: GregorianCalendar? = null
 
     val SHARED_PREF_STRING: String = "sharedPrefString"
     val SHARED_PREF_ARRAYLIST_STRING: String = "sharedPrefArrayListString"
@@ -48,10 +48,10 @@ class AddNewCardActivity : AppCompatActivity() {
     }
 
     private fun saveData() {
-        var sp : SharedPreferences = getSharedPreferences(SHARED_PREF_STRING, MODE_PRIVATE)
-        var editor : SharedPreferences.Editor = sp.edit()
-        var gson : Gson = Gson()
-        var jsonString : String = gson.toJson(MainActivity.cards)
+        var sp: SharedPreferences = getSharedPreferences(SHARED_PREF_STRING, MODE_PRIVATE)
+        var editor: SharedPreferences.Editor = sp.edit()
+        var gson: Gson = Gson()
+        var jsonString: String = gson.toJson(MainActivity.cards)
 
         editor.putString(SHARED_PREF_ARRAYLIST_STRING, jsonString)
         editor.apply()

@@ -3,11 +3,10 @@ package com.example.helloworldapplication
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Message
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_card_information.*
 import java.util.*
@@ -21,7 +20,7 @@ class CardInformation : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card_information)
 
-        val intent: Intent = getIntent()
+        val intent: Intent = intent
         val card: Card? = intent.getSerializableExtra(MyRecyclerViewAdapter.getExtraText()) as? Card
 
         fillCardInformation(card)
@@ -47,10 +46,10 @@ class CardInformation : AppCompatActivity() {
     }
 
     private fun saveData() {
-        var sp : SharedPreferences = getSharedPreferences(SHARED_PREF_STRING, MODE_PRIVATE)
-        var editor : SharedPreferences.Editor = sp.edit()
-        var gson : Gson = Gson()
-        var jsonString : String = gson.toJson(MainActivity.cards)
+        var sp: SharedPreferences = getSharedPreferences(SHARED_PREF_STRING, MODE_PRIVATE)
+        var editor: SharedPreferences.Editor = sp.edit()
+        var gson: Gson = Gson()
+        var jsonString: String = gson.toJson(MainActivity.cards)
 
         editor.putString(SHARED_PREF_ARRAYLIST_STRING, jsonString)
         editor.apply()
@@ -72,13 +71,13 @@ class CardInformation : AppCompatActivity() {
 
             // ValidFrom
             textView10.text =
-                (card?.validFrom?.get(Calendar.MONTH)!! + 1).toString() + "/" + card?.validFrom?.get(
+                (card.validFrom?.get(Calendar.MONTH)!! + 1).toString() + "/" + card.validFrom?.get(
                     Calendar.YEAR
                 ).toString()
 
             // ValidThru
             textView12.text =
-                (card?.validThru?.get(Calendar.MONTH)!! + 1).toString() + "/" + card?.validThru?.get(
+                (card.validThru?.get(Calendar.MONTH)!! + 1).toString() + "/" + card.validThru?.get(
                     Calendar.YEAR
                 ).toString()
 
