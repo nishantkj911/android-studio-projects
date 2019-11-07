@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 //        TODO("Adjust size of text in name text view and card number text view based on the length of string")
+        // adding fuckall code
     }
 
     private fun initCards() {
