@@ -6,16 +6,24 @@ import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_add_new_card.*
 import java.util.*
+import kotlin.collections.HashMap
 
 class AddNewCardActivity : AppCompatActivity() {
+
+//    private var SHARED_PREF_STRING : String = "sharedPrefString"
+//    private var SHARED_PREF_ARRAYLIST_STRING : String = "sharedPrefArrayListString"
 
     private var dateSetListenerValidFrom: DatePickerDialog.OnDateSetListener? = null
     private var dateSetListenerValidThru: DatePickerDialog.OnDateSetListener? = null
     private var dateFrom: GregorianCalendar? = null
     private var dateThru: GregorianCalendar? = null
+    private var hashMap: HashMap<Char, Int> = HashMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,10 +42,11 @@ class AddNewCardActivity : AppCompatActivity() {
             // Valid Text views being updated using OnDateSetListeners
             card.validFrom = dateFrom
             card.validThru = dateThru
+            card.gridValues = hashMap
 
             MainActivity.cards!!.add(card)
-            MainActivity().saveData()
-//            Toast.makeText(this, "New Card Successfully Added", Toast.LENGTH_LONG).show()
+            MainActivity().saveData(this)
+            Toast.makeText(this, "New Card Successfully Added", Toast.LENGTH_LONG).show()
             startActivity(Intent(this, MainActivity::class.java))
         }
 
@@ -47,13 +56,26 @@ class AddNewCardActivity : AppCompatActivity() {
     }
 
     private fun showDialog() {
-        val d: Dialog = Dialog(this)
-        d.setContentView(R.layout.grid_view_dialog)
-        d.show()
+        val d = Dialog(this)
+        d.setContentView(R.layout.grid_layout_dialog)
 
+        val valueAB: Button = d.findViewById(R.id.addValueButton)
+        var letterTB: EditText = d.findViewById<EditText>(R.id.letterTextBox)
+        var valueTB: EditText = d.findViewById<EditText>(R.id.valueTextBox)
+
+        valueAB.setOnClickListener {
+            Log.d(packageName + "LogTag", "Value add button Clicked")
+            hashMap[letterTB.text[0].toUpperCase()] = valueTB.text.toString().toInt()
+
+            valueTB.setText("")
+            letterTB.setText("")
+
+            Toast.makeText(this, "Added!", Toast.LENGTH_SHORT).show()
+        }
+        d.show()
     }
 
-/*    private fun saveData() {
+    /*private fun saveData() {
         var sp: SharedPreferences = getSharedPreferences(SHARED_PREF_STRING, MODE_PRIVATE)
         var editor: SharedPreferences.Editor = sp.edit()
         var gson: Gson = Gson()
