@@ -46,7 +46,7 @@ class MyRecyclerViewAdapter(context: Context, cards: ArrayList<Card>) :
             Log.d(mContext.packageName + "LogTag", "Clicked on " + holder.cardNameLabel.text)
 
             Toast.makeText(mContext, mCards[position].cardName, Toast.LENGTH_SHORT).show()
-            val intent: Intent = Intent(mContext, CardInformation::class.java)
+            val intent: Intent = Intent(mContext, CardInformationActivity::class.java)
             intent.putExtra(MyRecyclerViewAdapter.EXTRA_TEXT, mCards[position])
             mContext.startActivity(intent)
         }
@@ -55,7 +55,7 @@ class MyRecyclerViewAdapter(context: Context, cards: ArrayList<Card>) :
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var cardNameLabel = itemView.findViewById<TextView>(R.id.cardNameTextView)
         var parentLayout2: ConstraintLayout =
-            itemView.findViewById<ConstraintLayout>(R.id.parentLayout2)
+            itemView.findViewById(R.id.parentLayout2)
     }
 
 }
