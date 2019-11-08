@@ -1,5 +1,6 @@
 package com.example.helloworldapplication
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -79,5 +80,17 @@ class MainActivity : AppCompatActivity() {
         if (cards == null)
             cards = ArrayList<Card>()
         Log.d(packageName + "LogTag", "Loaded data")
+    }
+
+    fun saveData(context: Context) {
+//         TODO("Find a safer way to store information")
+        var sp: SharedPreferences = context.getSharedPreferences(SHARED_PREF_STRING, MODE_PRIVATE)
+        var editor: SharedPreferences.Editor = sp.edit()
+        var gson: Gson = Gson()
+        var jsonString: String = gson.toJson(MainActivity.cards)
+
+        editor.putString(SHARED_PREF_ARRAYLIST_STRING, jsonString)
+        editor.apply()
+        Toast.makeText(context, "Data Saved", Toast.LENGTH_SHORT).show()
     }
 }

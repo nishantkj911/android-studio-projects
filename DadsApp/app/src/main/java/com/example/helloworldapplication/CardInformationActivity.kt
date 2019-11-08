@@ -1,17 +1,16 @@
 package com.example.helloworldapplication
 
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_card_information.*
 import java.util.*
 
-class CardInformation : AppCompatActivity() {
+class CardInformationActivity : AppCompatActivity() {
 
     val SHARED_PREF_STRING: String = "sharedPrefString"
     val SHARED_PREF_ARRAYLIST_STRING: String = "sharedPrefArrayListString"
@@ -37,7 +36,7 @@ class CardInformation : AppCompatActivity() {
                 }
             }
             Toast.makeText(this, "Card Deleted", Toast.LENGTH_SHORT).show()
-            saveData()
+            MainActivity().saveData(this)
             startActivity(Intent(this, MainActivity::class.java))
         }
 
@@ -45,7 +44,7 @@ class CardInformation : AppCompatActivity() {
 //        TODO("Make a undo message and mechanism")
     }
 
-    private fun saveData() {
+    /*private fun saveData() {
         var sp: SharedPreferences = getSharedPreferences(SHARED_PREF_STRING, MODE_PRIVATE)
         var editor: SharedPreferences.Editor = sp.edit()
         var gson: Gson = Gson()
@@ -54,8 +53,9 @@ class CardInformation : AppCompatActivity() {
         editor.putString(SHARED_PREF_ARRAYLIST_STRING, jsonString)
         editor.apply()
         Toast.makeText(this, "Data Saved", Toast.LENGTH_SHORT).show()
-    }
+    }*/
 
+    @SuppressLint("SetTextI18n")
     private fun fillCardInformation(card: Card?) {
 
         if (card == null) {
@@ -83,6 +83,10 @@ class CardInformation : AppCompatActivity() {
 
             //CVV
             cvvTextView.text = card.cvv.toString()
+
+            // Grid Values
+            Log.d(packageName + "LogTag", card.gridValues.toString())
+            TODO("Add a table view to see grid information")
 
 //        TODO("Give spacing between every 4 letters of card number")
         }

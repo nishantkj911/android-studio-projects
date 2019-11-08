@@ -1,35 +1,38 @@
 package com.example.helloworldapplication
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_add_new_card.*
 import java.util.*
+import kotlin.collections.HashMap
 
 class AddNewCardActivity : AppCompatActivity() {
+
+//    private var SHARED_PREF_STRING : String = "sharedPrefString"
+//    private var SHARED_PREF_ARRAYLIST_STRING : String = "sharedPrefArrayListString"
 
     private var dateSetListenerValidFrom: DatePickerDialog.OnDateSetListener? = null
     private var dateSetListenerValidThru: DatePickerDialog.OnDateSetListener? = null
     private var dateFrom: GregorianCalendar? = null
     private var dateThru: GregorianCalendar? = null
-
-    val SHARED_PREF_STRING: String = "sharedPrefString"
-    val SHARED_PREF_ARRAYLIST_STRING: String = "sharedPrefArrayListString"
+    private var hashMap: HashMap<Char, Int> = HashMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_new_card)
-
         setOnClickListenersForValidTextBoxes()
-        setOnClickListenerForSubmitButton()
+        setOnClickListenerForButtons()
     }
 
-    private fun setOnClickListenerForSubmitButton() {
+    private fun setOnClickListenerForButtons() {
         submitButton.setOnClickListener {
             val card: Card = Card(cardNameTextField.text.toString())
             card.cardNumber = cardNumberTextField.text?.toString()
@@ -39,15 +42,40 @@ class AddNewCardActivity : AppCompatActivity() {
             // Valid Text views being updated using OnDateSetListeners
             card.validFrom = dateFrom
             card.validThru = dateThru
+            card.gridValues = hashMap
 
             MainActivity.cards!!.add(card)
-            saveData()
-//            Toast.makeText(this, "New Card Successfully Added", Toast.LENGTH_LONG).show()
+            MainActivity().saveData(this)
+            Toast.makeText(this, "New Card Successfully Added", Toast.LENGTH_LONG).show()
             startActivity(Intent(this, MainActivity::class.java))
+        }
+
+        addGridInfoButton.setOnClickListener {
+            showDialog()
         }
     }
 
-    private fun saveData() {
+    private fun showDialog() {
+        val d = Dialog(this)
+        d.setContentView(R.layout.grid_layout_dialog)
+
+        val valueAB: Button = d.findViewById(R.id.addValueButton)
+        var letterTB: EditText = d.findViewById<EditText>(R.id.letterTextBox)
+        var valueTB: EditText = d.findViewById<EditText>(R.id.valueTextBox)
+
+        valueAB.setOnClickListener {
+            Log.d(packageName + "LogTag", "Value add button Clicked")
+            hashMap[letterTB.text[0].toUpperCase()] = valueTB.text.toString().toInt()
+
+            valueTB.setText("")
+            letterTB.setText("")
+
+            Toast.makeText(this, "Added!", Toast.LENGTH_SHORT).show()
+        }
+        d.show()
+    }
+
+    /*private fun saveData() {
         var sp: SharedPreferences = getSharedPreferences(SHARED_PREF_STRING, MODE_PRIVATE)
         var editor: SharedPreferences.Editor = sp.edit()
         var gson: Gson = Gson()
@@ -56,14 +84,15 @@ class AddNewCardActivity : AppCompatActivity() {
         editor.putString(SHARED_PREF_ARRAYLIST_STRING, jsonString)
         editor.apply()
         Toast.makeText(this, "Data Saved", Toast.LENGTH_SHORT).show()
-    }
+    }*/
 
+    @SuppressLint("SetTextI18n")
     private fun setOnClickListenersForValidTextBoxes() {
 
 //        TODO("Modify this to just see month and year")
         dateSetListenerValidFrom =
-            DatePickerDialog.OnDateSetListener { datePicker, year, month, dayOfMonth ->
-                textView14?.text = (month + 1).toString() + "/" + year.toString()
+            DatePickerDialog.OnDateSetListener { _, year, month, _ ->
+                textView14?.text = """${(month + 1)}/$year"""
                 dateFrom = GregorianCalendar(year, month, 1)
             }
         dateSetListenerValidThru =

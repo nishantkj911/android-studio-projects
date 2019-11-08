@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CardInformation">
+    tools:context=".CardInformationActivity">
 
     <TextView
         android:id="@+id/textView12"
@@ -107,8 +107,9 @@
         android:layout_height="1dp"
         android:layout_marginTop="32dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toBottomOf="@+id/cvvTextView"
-        tools:layout_editor_absoluteX="16dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cvvTextView" />
 
     <TextView
         android:id="@+id/textView13"
