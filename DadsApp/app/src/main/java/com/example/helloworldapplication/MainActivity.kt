@@ -66,28 +66,29 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView() {
-        var adapter: MyRecyclerViewAdapter = MyRecyclerViewAdapter(this, cards!!)
-        var rv: RecyclerView = findViewById(R.id.recyclerView)
+        val adapter = MyRecyclerViewAdapter(this, cards!!)
+        val rv: RecyclerView = findViewById(R.id.recyclerView)
         rv.adapter = adapter
         rv.layoutManager = LinearLayoutManager(this)
     }
 
     private fun loadData() {
-        var sp: SharedPreferences? = getSharedPreferences(SHARED_PREF_STRING, MODE_PRIVATE)
-        var jsonString: String? = sp!!.getString(SHARED_PREF_ARRAYLIST_STRING, "")
+        val sp: SharedPreferences? = getSharedPreferences(SHARED_PREF_STRING, MODE_PRIVATE)
+        val jsonString: String? = sp!!.getString(SHARED_PREF_ARRAYLIST_STRING, "")
 
         cards = Gson().fromJson(jsonString, object : TypeToken<ArrayList<Card>>() {}.type)
         if (cards == null)
-            cards = ArrayList<Card>()
+            cards = ArrayList()
         Log.d(packageName + "LogTag", "Loaded data")
     }
 
     fun saveData(context: Context) {
 //         TODO("Find a safer way to store information")
-        var sp: SharedPreferences = context.getSharedPreferences(SHARED_PREF_STRING, MODE_PRIVATE)
-        var editor: SharedPreferences.Editor = sp.edit()
-        var gson: Gson = Gson()
-        var jsonString: String = gson.toJson(MainActivity.cards)
+//        TODO("Implement SQLite for storing data")
+        val sp: SharedPreferences = context.getSharedPreferences(SHARED_PREF_STRING, MODE_PRIVATE)
+        val editor: SharedPreferences.Editor = sp.edit()
+        val gson = Gson()
+        val jsonString: String = gson.toJson(cards)
 
         editor.putString(SHARED_PREF_ARRAYLIST_STRING, jsonString)
         editor.apply()

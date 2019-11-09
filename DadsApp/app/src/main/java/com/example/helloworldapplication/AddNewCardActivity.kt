@@ -16,9 +16,6 @@ import kotlin.collections.HashMap
 
 class AddNewCardActivity : AppCompatActivity() {
 
-//    private var SHARED_PREF_STRING : String = "sharedPrefString"
-//    private var SHARED_PREF_ARRAYLIST_STRING : String = "sharedPrefArrayListString"
-
     private var dateSetListenerValidFrom: DatePickerDialog.OnDateSetListener? = null
     private var dateSetListenerValidThru: DatePickerDialog.OnDateSetListener? = null
     private var dateFrom: GregorianCalendar? = null
@@ -75,17 +72,6 @@ class AddNewCardActivity : AppCompatActivity() {
         d.show()
     }
 
-    /*private fun saveData() {
-        var sp: SharedPreferences = getSharedPreferences(SHARED_PREF_STRING, MODE_PRIVATE)
-        var editor: SharedPreferences.Editor = sp.edit()
-        var gson: Gson = Gson()
-        var jsonString: String = gson.toJson(MainActivity.cards)
-
-        editor.putString(SHARED_PREF_ARRAYLIST_STRING, jsonString)
-        editor.apply()
-        Toast.makeText(this, "Data Saved", Toast.LENGTH_SHORT).show()
-    }*/
-
     @SuppressLint("SetTextI18n")
     private fun setOnClickListenersForValidTextBoxes() {
 
@@ -96,14 +82,14 @@ class AddNewCardActivity : AppCompatActivity() {
                 dateFrom = GregorianCalendar(year, month, 1)
             }
         dateSetListenerValidThru =
-            DatePickerDialog.OnDateSetListener { datePicker, year, month, dayOfMonth ->
+            DatePickerDialog.OnDateSetListener { _, year, month, _ ->
                 textView16?.text = (month + 1).toString() + "/" + year.toString()
                 dateThru = GregorianCalendar(year, month, 1)
             }
 
-        textView14.setOnClickListener { v ->
+        textView14.setOnClickListener {
             Log.d(packageName + "LogTag", "Valid from focus has been changed")
-            var dp: DatePickerDialog = DatePickerDialog(
+            var dp = DatePickerDialog(
                 this,
                 dateSetListenerValidFrom,
                 Calendar.getInstance().get(Calendar.YEAR),
@@ -116,7 +102,7 @@ class AddNewCardActivity : AppCompatActivity() {
 
         textView16.setOnClickListener { v ->
             Log.d(packageName + "LogTag", "Valid thru focus has been changed")
-            var dp: DatePickerDialog = DatePickerDialog(
+            val dp = DatePickerDialog(
                 this,
                 dateSetListenerValidThru,
                 Calendar.getInstance().get(Calendar.YEAR),
