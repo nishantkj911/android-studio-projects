@@ -1,19 +1,20 @@
 package com.example.helloworldapplication
 
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_card_information.*
 import java.util.*
 
 class CardInformationActivity : AppCompatActivity() {
-
-    val SHARED_PREF_STRING: String = "sharedPrefString"
-    val SHARED_PREF_ARRAYLIST_STRING: String = "sharedPrefArrayListString"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +28,26 @@ class CardInformationActivity : AppCompatActivity() {
     }
 
     private fun addOnClickListenersToCopyButtons(card: Card?) {
-//        TODO("Add OnClickListeners to all copy buttons and copy it to clipboard")
+        val clipboardManager: ClipboardManager =
+            getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        var clip = ClipData.newPlainText("simple Text", "Hello world")
+        clipboardManager.setPrimaryClip(clip)
+
+        cardNoCopyButton.setOnClickListener {
+            clip = ClipData.newPlainText("Card No Text", cardNumberTextView.text.toString())
+            clipboardManager.setPrimaryClip(clip)
+            Toast.makeText(this, "Copied!", Toast.LENGTH_SHORT).show()
+        }
+        nameCopyButton.setOnClickListener {
+            clip = ClipData.newPlainText("Name on card Text", nameOnCardTextView.text.toString())
+            clipboardManager.setPrimaryClip(clip)
+            Toast.makeText(this, "Copied!", Toast.LENGTH_SHORT).show()
+        }
+        cvvCopyButton.setOnClickListener {
+            clip = ClipData.newPlainText("CVV Text", cvvTextView.text.toString())
+            clipboardManager.setPrimaryClip(clip)
+            Toast.makeText(this, "Copied!", Toast.LENGTH_SHORT).show()
+        }
 
         deleteButton.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -44,23 +64,16 @@ class CardInformationActivity : AppCompatActivity() {
 //        TODO("Make a undo message and mechanism")
     }
 
-    /*private fun saveData() {
-        var sp: SharedPreferences = getSharedPreferences(SHARED_PREF_STRING, MODE_PRIVATE)
-        var editor: SharedPreferences.Editor = sp.edit()
-        var gson: Gson = Gson()
-        var jsonString: String = gson.toJson(MainActivity.cards)
-
-        editor.putString(SHARED_PREF_ARRAYLIST_STRING, jsonString)
-        editor.apply()
-        Toast.makeText(this, "Data Saved", Toast.LENGTH_SHORT).show()
-    }*/
-
     @SuppressLint("SetTextI18n")
     private fun fillCardInformation(card: Card?) {
 
         if (card == null) {
             Log.e(packageName + "LogTag", "Card object is null")
         } else {
+
+            // Card Name
+            val cardName: String? = card.cardName
+            cardNameTextView.text = cardName
 
             // Card Number
             val cardNum: String? = card.cardNumber
@@ -86,9 +99,23 @@ class CardInformationActivity : AppCompatActivity() {
 
             // Grid Values
             Log.d(packageName + "LogTag", card.gridValues.toString())
-            TODO("Add a table view to see grid information")
+            inflateTableLayoutWithGridInformation(card)
+
 
 //        TODO("Give spacing between every 4 letters of card number")
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun inflateTableLayoutWithGridInformation(card: Card) {
+        var i = 0
+        card.gridValues!!.toList().sortedBy { (key, _) -> key }.toMap().forEach { (key, value) ->
+            //            TODO("find a better way to get the reference to the inserted TableRow")
+            LayoutInflater.from(gridTable.context).inflate(R.layout.row_layout, gridTable, true)
+            val row = gridTable.getChildAt(i)
+            row.findViewById<TextView>(R.id.letterTextView).text = key.toString()
+            row.findViewById<TextView>(R.id.valueTextView).text = value.toString()
+            i++
         }
     }
 
