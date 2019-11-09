@@ -18,7 +18,7 @@ class CardInformationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_card_information)
+        setContentView(R.layout.card_information_activity_2)
 
         val intent: Intent = intent
         val card: Card? = intent.getSerializableExtra(MyRecyclerViewAdapter.getExtraText()) as? Card
