@@ -27,6 +27,10 @@ class AddNewCardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_new_card)
         setOnClickListenersForValidTextBoxes()
         setOnClickListenerForButtons()
+
+//        TODO("Make a mechanism to give a message saying 'Are you sure' and then proceed")
+//        TODO("Make a undo message and mechanism")
+//        TODO("Show the already entered grid information while entering")
     }
 
     private fun setOnClickListenerForButtons() {

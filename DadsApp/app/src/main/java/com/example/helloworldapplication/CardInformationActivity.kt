@@ -60,8 +60,7 @@ class CardInformationActivity : AppCompatActivity() {
             startActivity(Intent(this, MainActivity::class.java))
         }
 
-//        TODO("Make a mechanism to give a message saying 'Are you sure' and then proceed")
-//        TODO("Make a undo message and mechanism")
+//        TODO("Give an option to edit the card information")
     }
 
     @SuppressLint("SetTextI18n")

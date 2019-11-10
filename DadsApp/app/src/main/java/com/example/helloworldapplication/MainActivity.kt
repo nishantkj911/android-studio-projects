@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
 //        initCards()
         loadData()
         initRecyclerView()
+        // TODO("Implement fingerprint and screen lock verification")
 
         // opening the card page to show card information
         fab.setOnClickListener {
