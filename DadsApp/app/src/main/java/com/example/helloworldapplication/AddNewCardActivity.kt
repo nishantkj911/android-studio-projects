@@ -46,17 +46,19 @@ class AddNewCardActivity : AppCompatActivity() {
             card.gridValues = hashMap
 
             MainActivity.cards!!.add(card)
-            MainActivity().saveData(this)
+            saveData(this)
             Toast.makeText(this, "New Card Successfully Added", Toast.LENGTH_LONG).show()
             startActivity(Intent(this, MainActivity::class.java))
+            // TODO("Change the above line of code to go back to the main activity instead of reopening it on top")
+            // TODO("Also change main activity to load the data in resume/restart method of the life cycle
         }
 
         addGridInfoButton.setOnClickListener {
-            showDialog()
+            showGridInfoAddDialog()
         }
     }
 
-    private fun showDialog() {
+    private fun showGridInfoAddDialog() {
         val d = Dialog(this)
         d.setContentView(R.layout.grid_layout_dialog)
 
@@ -65,7 +67,7 @@ class AddNewCardActivity : AppCompatActivity() {
         var valueTB: EditText = d.findViewById<EditText>(R.id.valueTextBox)
 
         valueAB.setOnClickListener {
-            Log.d(packageName + "LogTag", "Value add button Clicked")
+            Log.d(resources.getString(R.string.logtag), "Value add button Clicked")
             hashMap[letterTB.text[0].toUpperCase()] = valueTB.text.toString().toInt()
 
             valueTB.setText("")
@@ -82,18 +84,18 @@ class AddNewCardActivity : AppCompatActivity() {
 //        TODO("Modify this to just see month and year")
         dateSetListenerValidFrom =
             DatePickerDialog.OnDateSetListener { _, year, month, _ ->
-                textView14?.text = """${(month + 1)}/$year"""
+                validFromTextView?.text = """${(month + 1)}/$year"""
                 dateFrom = GregorianCalendar(year, month, 1)
             }
         dateSetListenerValidThru =
             DatePickerDialog.OnDateSetListener { _, year, month, _ ->
-                textView16?.text = (month + 1).toString() + "/" + year.toString()
+                validThruTextView?.text = (month + 1).toString() + "/" + year.toString()
                 dateThru = GregorianCalendar(year, month, 1)
             }
 
-        textView14.setOnClickListener {
-            Log.d(packageName + "LogTag", "Valid from focus has been changed")
-            var dp = DatePickerDialog(
+        validFromTextView.setOnClickListener {
+            Log.d(resources.getString(R.string.logtag), "Valid from focus has been changed")
+            val dp = DatePickerDialog(
                 this,
                 dateSetListenerValidFrom,
                 Calendar.getInstance().get(Calendar.YEAR),
@@ -104,8 +106,8 @@ class AddNewCardActivity : AppCompatActivity() {
             dp.show()
         }
 
-        textView16.setOnClickListener { v ->
-            Log.d(packageName + "LogTag", "Valid thru focus has been changed")
+        validThruTextView.setOnClickListener { _ ->
+            Log.d(resources.getString(R.string.logtag), "Valid thru focus has been changed")
             val dp = DatePickerDialog(
                 this,
                 dateSetListenerValidThru,

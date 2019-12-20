@@ -1,33 +1,58 @@
 package com.example.helloworldapplication
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
+import android.view.ContextMenu
 import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_card_information.*
+import kotlinx.android.synthetic.main.activity_card_information.cardNameTextView
+import kotlinx.android.synthetic.main.activity_card_information.cardNoCopyButton
+import kotlinx.android.synthetic.main.activity_card_information.cardNumberTextView
+import kotlinx.android.synthetic.main.activity_card_information.cvvCopyButton
+import kotlinx.android.synthetic.main.activity_card_information.cvvTextView
+import kotlinx.android.synthetic.main.activity_card_information.deleteButton
+import kotlinx.android.synthetic.main.activity_card_information.gridTable
+import kotlinx.android.synthetic.main.activity_card_information.nameCopyButton
+import kotlinx.android.synthetic.main.activity_card_information.nameOnCardTextView
+import kotlinx.android.synthetic.main.activity_card_information.validFromTextView
+import kotlinx.android.synthetic.main.activity_card_information.validThruTextView
+import kotlinx.android.synthetic.main.card_information_activity_2.*
+import kotlinx.android.synthetic.main.editor_dialog.*
 import java.util.*
 
 class CardInformationActivity : AppCompatActivity() {
+
+    private var textViewUnderEditing: TextView? = null
+    private var card: Card? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.card_information_activity_2)
 
         val intent: Intent = intent
-        val card: Card? = intent.getSerializableExtra(MyRecyclerViewAdapter.getExtraText()) as? Card
+        // TODO ("Get index instead of card directly so that we can directly update the card data
+        card = intent.getSerializableExtra(MyRecyclerViewAdapter.getExtraText()) as? Card
 
-        fillCardInformation(card)
-        addOnClickListenersToCopyButtons(card)
+        fillCardInformation()
+        addOnClickListenersToCopyButtons()
+        enableContextMenusForTextViews()
     }
 
-    private fun addOnClickListenersToCopyButtons(card: Card?) {
+    private fun addOnClickListenersToCopyButtons() {
+
+        Toast.makeText(this, "The card is ${card!!.id}", Toast.LENGTH_SHORT).show()
+
         val clipboardManager: ClipboardManager =
             getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         var clip = ClipData.newPlainText("simple Text", "Hello world")
@@ -56,49 +81,125 @@ class CardInformationActivity : AppCompatActivity() {
                 }
             }
             Toast.makeText(this, "Card Deleted", Toast.LENGTH_SHORT).show()
-            MainActivity().saveData(this)
+            saveData(this)
+            startActivity(Intent(this, MainActivity::class.java))
+        }
+
+        saveButton.setOnClickListener {
+            card!!.cardNumber = cardNumberTextView.text.toString()
+            card!!.cardName = cardNameTextView.text.toString()
+            card!!.nameOnCard = nameOnCardTextView.text.toString()
+            card!!.cvv = cvvTextView.text.toString().toInt()
+
+            MainActivity.cards!!.forEach {
+                if (it.id == card!!.id) {
+                    Log.d(resources.getString(R.string.logtag), "Updated the actual card")
+                    it.nameOnCard = card!!.nameOnCard
+                    it.cardName = card!!.cardName
+                    it.cardNumber = card!!.cardNumber
+                    it.cvv = card!!.cvv
+                }
+            }
+
+            saveData(this)
             startActivity(Intent(this, MainActivity::class.java))
         }
 
 //        TODO("Give an option to edit the card information")
     }
 
+    override fun onCreateContextMenu(
+        menu: ContextMenu?,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        textViewUnderEditing = v as TextView
+        menuInflater.inflate(R.menu.long_press_menu, menu)
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+
+        val editingDialog = Dialog(this)
+        when (item.itemId) {
+            R.id.menuEdit -> {
+                editingDialog.setContentView(R.layout.editor_dialog)
+                editingDialog.editText1.setText(textViewUnderEditing!!.text)
+
+                editingDialog.button.setOnClickListener {
+                    textViewUnderEditing!!.text = editingDialog.editText1.text
+                    Log.d(resources.getString(R.string.logtag), "Editing taking place")
+                    editingDialog.dismiss()
+                }
+
+                when (textViewUnderEditing!!) {
+                    cardNumberTextView -> {
+                        editingDialog.textView10.text = "Enter new Card Number"
+                        editingDialog.editText1.inputType = InputType.TYPE_CLASS_NUMBER
+                    }
+                    cvvTextView -> {
+                        editingDialog.textView10.text = "Enter new CVV"
+                        editingDialog.editText1.inputType = InputType.TYPE_CLASS_NUMBER
+                    }
+                    validThruTextView -> {
+                        editingDialog.textView10.text = "Select new Valid Thru"
+//                        TODO()
+                    }
+                    validFromTextView -> {
+                        editingDialog.textView10.text = "Select new Valid From"
+//                        TODO()
+                    }
+                    nameOnCardTextView -> {
+                        editingDialog.textView10.text = "Enter new Name"
+                    }
+                    else ->
+                        editingDialog.textView10.text = "Update details"
+                }
+                editingDialog.show()
+            }
+            else ->
+                return super.onContextItemSelected(item)
+        }
+
+        return super.onContextItemSelected(item)
+    }
+
     @SuppressLint("SetTextI18n")
-    private fun fillCardInformation(card: Card?) {
+    private fun fillCardInformation() {
 
         if (card == null) {
-            Log.e(packageName + "LogTag", "Card object is null")
+            Log.e(resources.getString(R.string.logtag), "Card object is null")
         } else {
 
             // Card Name
-            val cardName: String? = card.cardName
+            val cardName: String? = card!!.cardName
             cardNameTextView.text = cardName
 
             // Card Number
-            val cardNum: String? = card.cardNumber
+            val cardNum: String? = card!!.cardNumber
             cardNumberTextView.text = cardNum
 
             // Name on Card
-            nameOnCardTextView.text = card.nameOnCard
+            nameOnCardTextView.text = card!!.nameOnCard
 
             // ValidFrom
-            textView10.text =
-                (card.validFrom?.get(Calendar.MONTH)!! + 1).toString() + "/" + card.validFrom?.get(
+            validFromTextView.text =
+                (card!!.validFrom?.get(Calendar.MONTH)!! + 1).toString() + "/" + card!!.validFrom?.get(
                     Calendar.YEAR
                 ).toString()
 
             // ValidThru
-            textView12.text =
-                (card.validThru?.get(Calendar.MONTH)!! + 1).toString() + "/" + card.validThru?.get(
+            validThruTextView.text =
+                (card!!.validThru?.get(Calendar.MONTH)!! + 1).toString() + "/" + card!!.validThru?.get(
                     Calendar.YEAR
                 ).toString()
 
             //CVV
-            cvvTextView.text = card.cvv.toString()
+            cvvTextView.text = card!!.cvv.toString()
 
             // Grid Values
-            Log.d(packageName + "LogTag", card.gridValues.toString())
-            inflateTableLayoutWithGridInformation(card)
+            Log.d(packageName + "LogTag", card!!.gridValues.toString())
+            inflateTableLayoutWithGridInformation()
 
 
 //        TODO("Give spacing between every 4 letters of card number")
@@ -106,9 +207,9 @@ class CardInformationActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun inflateTableLayoutWithGridInformation(card: Card) {
+    private fun inflateTableLayoutWithGridInformation() {
         var i = 0
-        card.gridValues!!.toList().sortedBy { (key, _) -> key }.toMap().forEach { (key, value) ->
+        card!!.gridValues!!.toList().sortedBy { (key, _) -> key }.toMap().forEach { (key, value) ->
             //            TODO("find a better way to get the reference to the inserted TableRow")
             LayoutInflater.from(gridTable.context).inflate(R.layout.row_layout, gridTable, true)
             val row = gridTable.getChildAt(i)
@@ -118,5 +219,13 @@ class CardInformationActivity : AppCompatActivity() {
         }
     }
 
+    private fun enableContextMenusForTextViews() {
+        registerForContextMenu(cardNameTextView)
+        registerForContextMenu(cardNumberTextView)
+        registerForContextMenu(nameOnCardTextView)
+        registerForContextMenu(cvvTextView)
+        registerForContextMenu(validFromTextView)
+        registerForContextMenu(validThruTextView)
+    }
 
 }

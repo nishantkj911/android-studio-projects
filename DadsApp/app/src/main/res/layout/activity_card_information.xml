@@ -7,7 +7,7 @@
     tools:context=".CardInformationActivity">
 
     <TextView
-        android:id="@+id/textView12"
+        android:id="@+id/validThruTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -126,7 +126,7 @@
         android:layout_marginTop="32dp"
         android:text="CVV"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+        app:layout_constraintTop_toBottomOf="@+id/validFromTextView" />
 
     <TextView
         android:id="@+id/cvvTextView"
@@ -152,7 +152,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
     <TextView
-        android:id="@+id/textView10"
+        android:id="@+id/validFromTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

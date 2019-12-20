@@ -43,7 +43,10 @@ class MyRecyclerViewAdapter(context: Context, cards: ArrayList<Card>) :
 
         holder.cardNameLabel.text = mCards[position].cardName
         holder.parentLayout2.setOnClickListener {
-            Log.d(mContext.packageName + "LogTag", "Clicked on " + holder.cardNameLabel.text)
+            Log.d(
+                mContext.resources.getString(R.string.logtag),
+                "Clicked on " + holder.cardNameLabel.text
+            )
 
             Toast.makeText(mContext, mCards[position].cardName, Toast.LENGTH_SHORT).show()
             val intent: Intent = Intent(mContext, CardInformationActivity::class.java)

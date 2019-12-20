@@ -4,4 +4,10 @@
     <string name="apply">Apply</string>
     <string name="select_a_max_value">Select a Max Value</string>
     <string name="card_number">Card Number</string>
+    <string name="logtag">com.example.helloworldapplicationLogTag</string>
+
+    <array name="addCardLongPressOptionsArray">
+        <item>Edit</item>
+        <item>Reset</item>
+    </array>
 </resources>
