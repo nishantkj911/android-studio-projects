@@ -9,15 +9,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.helloworldapplication.MyRecyclerViewAdapter.ViewHolder
 
 class MyRecyclerViewAdapter(context: Context, cards: ArrayList<Card>) :
     RecyclerView.Adapter<ViewHolder>() {
 
-    var mContext: Context = context
-    var mCards: ArrayList<Card> = cards
+    private var mContext: Context = context
+    private var mCards: ArrayList<Card> = cards
 
     companion object {
         var EXTRA_TEXT: String = "projectName.cardExtraText"
@@ -57,8 +57,8 @@ class MyRecyclerViewAdapter(context: Context, cards: ArrayList<Card>) :
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var cardNameLabel = itemView.findViewById(R.id.cardNameTextView) as TextView
-        var parentLayout2: ConstraintLayout =
-            itemView.findViewById(R.id.parentLayout2)
+        var parentLayout2: CardView =
+            itemView.findViewById(R.id.parent_layout)
     }
 
 }
