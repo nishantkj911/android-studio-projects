@@ -6,6 +6,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.rule.ActivityTestRule
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -14,10 +15,6 @@ class CardInformationActivityTest {
 
     @get:Rule
     var mainActivityRule = ActivityTestRule(MainActivity::class.java)
-
-    @Before
-    fun setUp() {
-    }
 
     private fun openACard(i: Int) {
         onView(withId(R.id.recyclerView)).perform(
@@ -29,9 +26,30 @@ class CardInformationActivityTest {
     }
 
     @Test
+    fun openACard() {
+        onView(withId(R.id.recyclerView)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<MyRecyclerViewAdapter.ViewHolder>(
+                MainActivity.cards!!.size - 1,
+                click()
+            )
+        )
+    }
+
+    @Test
     fun deleteCard() {
         openACard(MainActivity.cards!!.size - 1)
         onView(withId(R.id.deleteButton)).perform(scrollTo(), click())
+    }
+
+    private fun deleteCard(i: Int) {
+        openACard(i)
+        onView(withId(R.id.deleteButton)).perform(scrollTo(), click())
+    }
+
+    @Test
+    fun deleteAllCards() {
+        for (i in 0 until MainActivity.cards!!.size)
+            deleteCard(0)
     }
 
     @Test
@@ -62,10 +80,18 @@ class CardInformationActivityTest {
         onView(withId(R.id.editText1)).perform(replaceText("987"))
         onView(withId(R.id.button)).perform(click())
 
+        // Edit ValidThru
+        // Edit ValidFrom
+        // Edit Grid information
+
         onView(withId(R.id.saveButton)).perform(scrollTo(), click())
     }
 
-    /*@After
+    @Before
+    fun setUp() {
+    }
+
+    @After
     fun tearDown() {
-    }*/
+    }
 }
