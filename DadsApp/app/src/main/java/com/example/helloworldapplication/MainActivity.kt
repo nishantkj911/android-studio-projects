@@ -1,7 +1,6 @@
 package com.example.helloworldapplication
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
@@ -32,11 +31,9 @@ class MainActivity : AppCompatActivity() {
         Log.d(resources.getString(R.string.logtag), "onCreate Main Activity")
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-
         authenticateUser()
         // TODO("figure out a way to ask for authentication when application goes into back and after a timeout.")
 
-//        initCards()
 
         // opening the card page to show card information
         fab.setOnClickListener {
@@ -59,29 +56,17 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode == Activity.RESULT_FIRST_USER && requestCode == MY_KEYPAD_INTENT_REQUEST_CODE) {
-            AlertDialog.Builder(this)
-                .setTitle("BEWARE!!")
-                .setMessage("To avoid misuse of the app, please make sure to kill the application process after use from the 'Recent Apps' tab.")
-                .setPositiveButton("OK") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .create()
-                .show()
-
-            Log.d(resources.getString(R.string.logtag), "Showing dialog for the first time")
-
-        }
-
         Runnable {
             if (resultCode == RESULT_OK && requestCode == MY_KEYPAD_INTENT_REQUEST_CODE) {
+                // TODO("Add a message to close app after use for first time installation")
+
                 runOnUiThread {
                     Toast.makeText(this, "Logged in Successfully", Toast.LENGTH_SHORT).show()
                 }
             } else if (resultCode == Activity.RESULT_CANCELED && requestCode == MY_KEYPAD_INTENT_REQUEST_CODE) {
                 finish()
             }
-        }
+        }.run()
     }
 
     override fun onStart() {
