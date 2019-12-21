@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.InputType
@@ -40,9 +39,9 @@ class CardInformationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.card_information_activity_2)
 
-        val intent: Intent = intent
-        // TODO ("Get index instead of card directly so that we can directly update the card data
-        card = intent.getSerializableExtra(MyRecyclerViewAdapter.getExtraText()) as? Card
+//         TODO ("Get index instead of card directly so that we can directly update the card data
+        val cardInt: Int = intent.getIntExtra(MyRecyclerViewAdapter.getExtraText(), Int.MAX_VALUE)
+        card = MainActivity.cards!![cardInt]
 
         fillCardInformation()
         addOnClickListenersToCopyButtons()
@@ -50,8 +49,6 @@ class CardInformationActivity : AppCompatActivity() {
     }
 
     private fun addOnClickListenersToCopyButtons() {
-
-        Toast.makeText(this, "The card is ${card!!.id}", Toast.LENGTH_SHORT).show()
 
         val clipboardManager: ClipboardManager =
             getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
@@ -82,7 +79,7 @@ class CardInformationActivity : AppCompatActivity() {
             }
             Toast.makeText(this, "Card Deleted", Toast.LENGTH_SHORT).show()
             saveData(this)
-            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
 
         saveButton.setOnClickListener {
@@ -91,7 +88,7 @@ class CardInformationActivity : AppCompatActivity() {
             card!!.nameOnCard = nameOnCardTextView.text.toString()
             card!!.cvv = cvvTextView.text.toString().toInt()
 
-            MainActivity.cards!!.forEach {
+            /*MainActivity.cards!!.forEach {
                 if (it.id == card!!.id) {
                     Log.d(resources.getString(R.string.logtag), "Updated the actual card")
                     it.nameOnCard = card!!.nameOnCard
@@ -99,10 +96,10 @@ class CardInformationActivity : AppCompatActivity() {
                     it.cardNumber = card!!.cardNumber
                     it.cvv = card!!.cvv
                 }
-            }
+            }*/
 
             saveData(this)
-            startActivity(Intent(this, MainActivity::class.java))
+//            startActivity(Intent(this, MainActivity::class.java))
         }
 
 //        TODO("Give an option to edit the card information")
