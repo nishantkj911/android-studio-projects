@@ -44,11 +44,11 @@ class CardInformationActivity : AppCompatActivity() {
         card = MainActivity.cards!![cardInt]
 
         fillCardInformation()
-        addOnClickListenersToCopyButtons()
+        addOnClickListenersToAllButtons()
         enableContextMenusForTextViews()
     }
 
-    private fun addOnClickListenersToCopyButtons() {
+    private fun addOnClickListenersToAllButtons() {
 
         val clipboardManager: ClipboardManager =
             getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
@@ -88,18 +88,8 @@ class CardInformationActivity : AppCompatActivity() {
             card!!.nameOnCard = nameOnCardTextView.text.toString()
             card!!.cvv = cvvTextView.text.toString().toInt()
 
-            /*MainActivity.cards!!.forEach {
-                if (it.id == card!!.id) {
-                    Log.d(resources.getString(R.string.logtag), "Updated the actual card")
-                    it.nameOnCard = card!!.nameOnCard
-                    it.cardName = card!!.cardName
-                    it.cardNumber = card!!.cardNumber
-                    it.cvv = card!!.cvv
-                }
-            }*/
-
             saveData(this)
-//            startActivity(Intent(this, MainActivity::class.java))
+            Toast.makeText(this, "Saved!!", Toast.LENGTH_SHORT).show()
         }
 
 //        TODO("Give an option to edit the card information")
@@ -121,14 +111,18 @@ class CardInformationActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.menuEdit -> {
                 editingDialog.setContentView(R.layout.editor_dialog)
+
+                // Changing the reference to the TextView which is actually being edited
                 editingDialog.editText1.setText(textViewUnderEditing!!.text)
 
+                // What happens when the OK button is clicked
                 editingDialog.button.setOnClickListener {
                     textViewUnderEditing!!.text = editingDialog.editText1.text
                     Log.d(resources.getString(R.string.logtag), "Editing taking place")
                     editingDialog.dismiss()
                 }
 
+                // Editing appropriate TextViews' input type and Text to appear
                 when (textViewUnderEditing!!) {
                     cardNumberTextView -> {
                         editingDialog.textView10.text = "Enter new Card Number"
