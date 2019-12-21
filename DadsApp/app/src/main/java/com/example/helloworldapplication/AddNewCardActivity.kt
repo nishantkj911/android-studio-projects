@@ -3,7 +3,6 @@ package com.example.helloworldapplication
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -48,7 +47,8 @@ class AddNewCardActivity : AppCompatActivity() {
             MainActivity.cards!!.add(card)
             saveData(this)
             Toast.makeText(this, "New Card Successfully Added", Toast.LENGTH_LONG).show()
-            startActivity(Intent(this, MainActivity::class.java))
+//            startActivity(Intent(this, MainActivity::class.java))
+            finish()
             // TODO("Change the above line of code to go back to the main activity instead of reopening it on top")
             // TODO("Also change main activity to load the data in resume/restart method of the life cycle
         }
@@ -63,8 +63,8 @@ class AddNewCardActivity : AppCompatActivity() {
         d.setContentView(R.layout.grid_layout_dialog)
 
         val valueAB: Button = d.findViewById(R.id.addValueButton)
-        var letterTB: EditText = d.findViewById<EditText>(R.id.letterTextBox)
-        var valueTB: EditText = d.findViewById<EditText>(R.id.valueTextBox)
+        val letterTB: EditText = d.findViewById(R.id.letterTextBox)
+        val valueTB: EditText = d.findViewById(R.id.valueTextBox)
 
         valueAB.setOnClickListener {
             Log.d(resources.getString(R.string.logtag), "Value add button Clicked")
@@ -76,6 +76,8 @@ class AddNewCardActivity : AppCompatActivity() {
             Toast.makeText(this, "Added!", Toast.LENGTH_SHORT).show()
         }
         d.show()
+
+//        TODO("Show the grid information once added and option to edit it.")
     }
 
     @SuppressLint("SetTextI18n")
@@ -104,9 +106,10 @@ class AddNewCardActivity : AppCompatActivity() {
             )
 
             dp.show()
+
         }
 
-        validThruTextView.setOnClickListener { _ ->
+        validThruTextView.setOnClickListener {
             Log.d(resources.getString(R.string.logtag), "Valid thru focus has been changed")
             val dp = DatePickerDialog(
                 this,
