@@ -10,7 +10,6 @@ import java.io.Serializable
 import java.util.*
 
 class Card : Serializable {
-    var id: Int = Int.MAX_VALUE
     var cardName: String? = null
     var nameOnCard: String? = null
     var cardNumber: String? = null
@@ -34,22 +33,10 @@ class Card : Serializable {
         this.validThru = validThru
         this.cvv = cvv
         gridValues = HashMap()
-
-        try {
-            this.id = MainActivity.cards!!.size
-        } catch (exc: KotlinNullPointerException) {
-            println("Cards reference not found")
-        }
-
     }
 
     constructor(cardName: String) {
         this.cardName = cardName
-        try {
-            this.id = MainActivity.cards!!.size
-        } catch (exc: KotlinNullPointerException) {
-            println("Cards reference not found")
-        }
         gridValues = HashMap()
     }
 }
