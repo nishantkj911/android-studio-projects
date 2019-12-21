@@ -2,7 +2,6 @@ package com.example.helloworldapplication
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -36,6 +35,9 @@ class Card : Serializable {
     }
 
     constructor(cardName: String) {
+        if (cardName == "")
+            throw KotlinNullPointerException()
+
         this.cardName = cardName
         gridValues = HashMap()
     }
@@ -69,5 +71,11 @@ fun saveData(context: Context) {
 
     editor.putString(SHARED_PREF_ARRAYLIST_STRING, jsonString)
     editor.apply()
-    Toast.makeText(context, "Data Saved", Toast.LENGTH_SHORT).show()
+}
+
+fun deleteAllData(context: Context) {
+    val sp = context.getSharedPreferences(SHARED_PREF_STRING, AppCompatActivity.MODE_PRIVATE)
+    val editor = sp.edit()
+    editor.putString(SHARED_PREF_ARRAYLIST_STRING, "")
+    editor.apply()
 }
