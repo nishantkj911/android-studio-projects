@@ -1,5 +1,7 @@
 package com.example.helloworldapplication
 
+import android.app.Activity
+import android.app.AlertDialog
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
@@ -31,13 +33,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        // Implemented
         authenticateUser()
         // TODO("figure out a way to ask for authentication when application goes into back and after a timeout.")
 
 //        initCards()
-        loadData(this)
-        initRecyclerView()
 
         // opening the card page to show card information
         fab.setOnClickListener {
@@ -48,13 +47,6 @@ class MainActivity : AppCompatActivity() {
 //        TODO("Adjust size of text in name text view and card number text view based on the length of string")
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK && requestCode == MY_KEYPAD_INTENT_REQUEST_CODE) {
-            Toast.makeText(this, "Logged in Successfully", Toast.LENGTH_SHORT).show()
-        }
-    }
-
     private fun authenticateUser() {
         val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
         val intentToSignIn = keyguardManager.createConfirmDeviceCredentialIntent(
@@ -62,6 +54,41 @@ class MainActivity : AppCompatActivity() {
             "Use PIN/Password/Pattern/Fingerprint to sign in"
         )
         startActivityForResult(intentToSignIn, MY_KEYPAD_INTENT_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_FIRST_USER && requestCode == MY_KEYPAD_INTENT_REQUEST_CODE) {
+            AlertDialog.Builder(this)
+                .setTitle("BEWARE!!")
+                .setMessage("To avoid misuse of the app, please make sure to kill the application process after use from the 'Recent Apps' tab.")
+                .setPositiveButton("OK") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+                .show()
+
+            Log.d(resources.getString(R.string.logtag), "Showing dialog for the first time")
+
+        }
+
+        Runnable {
+            if (resultCode == RESULT_OK && requestCode == MY_KEYPAD_INTENT_REQUEST_CODE) {
+                runOnUiThread {
+                    Toast.makeText(this, "Logged in Successfully", Toast.LENGTH_SHORT).show()
+                }
+            } else if (resultCode == Activity.RESULT_CANCELED && requestCode == MY_KEYPAD_INTENT_REQUEST_CODE) {
+                finish()
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(resources.getString(R.string.logtag), "onStart Main Activity")
+        loadData(this)
+        initRecyclerView()
     }
 
     override fun onRequestPermissionsResult(
@@ -87,29 +114,6 @@ class MainActivity : AppCompatActivity() {
         rv.adapter = adapter
         rv.layoutManager = LinearLayoutManager(this)
     }
-
-/*    private fun loadData() {
-        val sp: SharedPreferences? = getSharedPreferences(SHARED_PREF_STRING, MODE_PRIVATE)
-        val jsonString: String? = sp!!.getString(SHARED_PREF_ARRAYLIST_STRING, "")
-
-        cards = Gson().fromJson(jsonString, object : TypeToken<ArrayList<Card>>() {}.type)
-        if (cards == null)
-            cards = ArrayList()
-        Log.d(resources.getString(R.string.logtag), "Loaded data")
-    }
-
-    fun saveData(context: Context) {
-//         TODO("Find a safer way to store information")
-//        TODO("Implement SQLite for storing data")
-        val sp: SharedPreferences = context.getSharedPreferences(SHARED_PREF_STRING, MODE_PRIVATE)
-        val editor: SharedPreferences.Editor = sp.edit()
-        val gson = Gson()
-        val jsonString: String = gson.toJson(cards)
-
-        editor.putString(SHARED_PREF_ARRAYLIST_STRING, jsonString)
-        editor.apply()
-        Toast.makeText(context, "Data Saved", Toast.LENGTH_SHORT).show()
-    }*/
 
     private fun biometricsAuthenticate() { // For API > 29
 
