@@ -29,8 +29,7 @@ class MyRecyclerViewAdapter(context: Context, cards: ArrayList<Card>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View =
             LayoutInflater.from(parent.context).inflate(R.layout.card_layout, parent, false)
-        val vh: ViewHolder = ViewHolder(view)
-        return vh
+        return ViewHolder(view)
     }
 
     override fun getItemCount(): Int {
@@ -49,14 +48,15 @@ class MyRecyclerViewAdapter(context: Context, cards: ArrayList<Card>) :
             )
 
             Toast.makeText(mContext, mCards[position].cardName, Toast.LENGTH_SHORT).show()
-            val intent: Intent = Intent(mContext, CardInformationActivity::class.java)
-            intent.putExtra(MyRecyclerViewAdapter.EXTRA_TEXT, mCards[position])
+            val intent = Intent(mContext, CardInformationActivity::class.java)
+//            intent.putExtra(EXTRA_TEXT, mCards[position])
+            intent.putExtra(EXTRA_TEXT, position) // using position to refer to the card.
             mContext.startActivity(intent)
         }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var cardNameLabel = itemView.findViewById<TextView>(R.id.cardNameTextView)
+        var cardNameLabel = itemView.findViewById(R.id.cardNameTextView) as TextView
         var parentLayout2: ConstraintLayout =
             itemView.findViewById(R.id.parentLayout2)
     }
