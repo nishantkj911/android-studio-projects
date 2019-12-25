@@ -3,12 +3,8 @@ package com.example.helloworldapplication
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
-import android.app.Dialog
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_add_new_card.*
@@ -26,12 +22,10 @@ class AddNewCardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_new_card)
-        setOnClickListenersForValidTextBoxes()
-        setOnClickListenerForButtons()
-
-
-//        TODO("Make a undo message and mechanism")
-//        TODO("Show the already entered grid information while entering")
+        Runnable {
+            setListenersForDateTextViews()
+            setOnClickListenerForButtons()
+        }.run()
     }
 
     private fun setOnClickListenerForButtons() {
@@ -43,7 +37,7 @@ class AddNewCardActivity : AppCompatActivity() {
                 .setTitle("Are you sure you want to proceed?")
                 .setMessage("Please make sure the information is correct before proceeding.")
                 .setPositiveButton("YES") { dialog, _ ->
-                    MainActivity.cards!!.add(card!!)
+                    MainActivity.cards.add(card!!)
                     saveData(this)
                     Toast.makeText(this, "New Card Successfully Added", Toast.LENGTH_LONG).show()
                     dialog.dismiss()
@@ -61,7 +55,7 @@ class AddNewCardActivity : AppCompatActivity() {
         }
 
         addGridInfoButton.setOnClickListener {
-            showGridInfoAddDialog()
+            addListenerToGridInfoAddButton(this, hashMap, gridTableAdd)
         }
     }
 
@@ -71,6 +65,12 @@ class AddNewCardActivity : AppCompatActivity() {
             Log.d(resources.getString(R.string.logtag), "Doing verification")
             card = Card(cardNameTextField.text.toString())
             card.cvv = (cvvTextField.text).toString().toInt()
+
+            card.pin = if (pinTextField.text.isEmpty()) {
+                0
+            } else {
+                pinTextField.text.toString().toInt()
+            }
 
             card.cardNumber = if (cardNumberTextField.text.isEmpty()) {
                 Log.d(resources.getString(R.string.logtag), "throwing Exception")
@@ -84,25 +84,14 @@ class AddNewCardActivity : AppCompatActivity() {
             } else
                 nameOnCardTextField.text.toString()
         } catch (e: KotlinNullPointerException) {
-            AlertDialog.Builder(this)
-                .setPositiveButton("OK") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .setTitle("Incomplete Card Details")
-                .setMessage("Please make sure all the details are filled.")
-                .create()
-                .show()
-
+            showAlertDialog(
+                this,
+                "Incomplete Card Details",
+                "Please make sure all the details are filled."
+            )
             card = null
         } catch (e: NumberFormatException) {
-            AlertDialog.Builder(this)
-                .setPositiveButton("OK") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .setTitle("Invalid CVV")
-                .setMessage("Please make the format for CVV is proper")
-                .create()
-                .show()
+            showAlertDialog(this, "Invalid CVV", "Please make the format for CVV is proper")
             card = null
         }
 
@@ -114,14 +103,7 @@ class AddNewCardActivity : AppCompatActivity() {
         // Valid Text views being updated using OnDateSetListeners
         if (dateThru == null || dateFrom == null) {
             card = null
-            AlertDialog.Builder(this)
-                .setPositiveButton("OK") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .setTitle("Invalid Dates")
-                .setMessage("Please Select some date to proceed")
-                .create()
-                .show()
+            showAlertDialog(this, "Invalid Dates", "Please Select some date to proceed")
         } else {
             card.validThru = dateThru
             card.validFrom = dateFrom
@@ -130,30 +112,8 @@ class AddNewCardActivity : AppCompatActivity() {
         return card
     }
 
-    private fun showGridInfoAddDialog() {
-        val d = Dialog(this)
-        d.setContentView(R.layout.grid_layout_dialog)
-
-        val valueAB: Button = d.findViewById(R.id.addValueButton)
-        val letterTB: EditText = d.findViewById(R.id.letterTextBox)
-        val valueTB: EditText = d.findViewById(R.id.valueTextBox)
-
-        valueAB.setOnClickListener {
-            Log.d(resources.getString(R.string.logtag), "Value add button Clicked")
-            hashMap[letterTB.text[0].toUpperCase()] = valueTB.text.toString().toInt()
-
-            valueTB.setText("")
-            letterTB.setText("")
-
-            Toast.makeText(this, "Added!", Toast.LENGTH_SHORT).show()
-        }
-        d.show()
-
-//        TODO("Show the grid information once added and option to edit it.")
-    }
-
     @SuppressLint("SetTextI18n")
-    private fun setOnClickListenersForValidTextBoxes() {
+    private fun setListenersForDateTextViews() {
 
 //        TODO("Modify this to just see month and year")
         dateSetListenerValidFrom =
@@ -192,4 +152,5 @@ class AddNewCardActivity : AppCompatActivity() {
             dp.show()
         }
     }
+
 }
