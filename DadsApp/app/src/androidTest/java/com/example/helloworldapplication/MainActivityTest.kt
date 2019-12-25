@@ -19,18 +19,18 @@ class MainActivityTest {
 
     @Test
     fun viewAllCards() {
-        for (i in 0 until MainActivity.cards!!.size)
+        for (i in 0 until MainActivity.cards.size)
 //            viewCard(i)
             login()
     }
 
     @Test
     fun viewCard() {
-//        TODO("find a way to log in to the app and then test if all the cards are opening")
+//        TODO("find a way to log in to the app")
 
         Espresso.onView(withId(R.id.recyclerView)).perform(
             RecyclerViewActions.actionOnItemAtPosition<MyRecyclerViewAdapter.ViewHolder>(
-                MainActivity.cards!!.size - 1,
+                MainActivity.cards.size - 1,
                 click()
             )
         )
