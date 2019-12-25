@@ -116,7 +116,7 @@
             android:layout_height="1dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="32dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="16dp"
             android:background="?android:attr/listDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -138,7 +138,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:inputType="number"
+            android:inputType="number|numberPassword"
             android:text="000"
             android:textSize="30sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -154,6 +154,39 @@
             android:src="@drawable/ic_content_copy_black_24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+        <TextView
+            android:id="@+id/textView90"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:text="PIN"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cvvTextView" />
+
+        <TextView
+            android:id="@+id/pinTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:inputType="number|numberPassword"
+            android:text="1234"
+            android:textSize="30sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView90" />
+
+        <ImageButton
+            android:id="@+id/pinCopyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="#0000"
+            android:src="@drawable/ic_content_copy_black_24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView90" />
 
         <TextView
             android:id="@+id/validFromTextView"
@@ -178,12 +211,14 @@
 
         <TableLayout
             android:id="@+id/gridTable"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView19" />
+            app:layout_constraintTop_toBottomOf="@+id/addMoreGridInfo" />
 
         <TextView
             android:id="@+id/textView19"
@@ -192,8 +227,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:text="Grid Information"
+            app:layout_constraintBottom_toBottomOf="@+id/addMoreGridInfo"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cvvTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/pinTextView" />
 
         <TextView
             android:id="@+id/cardNameTextView"
@@ -218,6 +254,39 @@
             android:text="Save"
             app:layout_constraintStart_toEndOf="@+id/deleteButton"
             app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+        <ImageButton
+            android:id="@+id/addMoreGridInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="#0000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pinTextView"
+            app:srcCompat="@drawable/ic_add_black_24dp" />
+
+        <ImageButton
+            android:id="@+id/cvvViewButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="#0000"
+            app:layout_constraintEnd_toStartOf="@+id/cvvCopyButton"
+            app:layout_constraintTop_toBottomOf="@+id/textView13"
+            app:srcCompat="@drawable/ic_visibility_grey_900_24dp" />
+
+        <ImageButton
+            android:id="@+id/pinViewButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="#0000"
+            app:layout_constraintEnd_toStartOf="@+id/pinCopyButton"
+            app:layout_constraintTop_toBottomOf="@+id/textView90"
+            app:srcCompat="@drawable/ic_visibility_grey_900_24dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

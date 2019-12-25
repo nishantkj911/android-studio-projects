@@ -10,12 +10,13 @@ import java.util.*
 
 class Card : Serializable {
     var cardName: String? = null
+    var pin: Int = 0
     var nameOnCard: String? = null
     var cardNumber: String? = null
     var validFrom: GregorianCalendar? = null
     var validThru: GregorianCalendar? = null
     var cvv: Int = 0
-    var gridValues: HashMap<Char, Int>? = null
+    var gridValues: HashMap<Char, Int>
 
     constructor(
         cardName: String,
@@ -23,7 +24,8 @@ class Card : Serializable {
         cardNumber: String,
         validFrom: GregorianCalendar,
         validThru: GregorianCalendar,
-        cvv: Int
+        cvv: Int,
+        pin: Int
     ) {
         this.cardName = cardName
         this.nameOnCard = nameOnCard
@@ -32,6 +34,7 @@ class Card : Serializable {
         this.validThru = validThru
         this.cvv = cvv
         gridValues = HashMap()
+        this.pin = pin
     }
 
     constructor(cardName: String) {

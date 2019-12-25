@@ -14,15 +14,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
-import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
     private val MY_KEYPAD_INTENT_REQUEST_CODE = 241
 
     companion object {
-        var cards: ArrayList<Card>? = ArrayList<Card>()
+        var cards: ArrayList<Card> = ArrayList()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,7 +92,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView() {
-        val adapter = MyRecyclerViewAdapter(this, cards!!)
+        val adapter = MyRecyclerViewAdapter(this, cards)
         val rv: RecyclerView = findViewById(R.id.recyclerView)
         rv.adapter = adapter
         rv.layoutManager = LinearLayoutManager(this)
@@ -131,7 +129,7 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
-    private fun initCards() {
+    /*private fun initCards() {
         cards!!.add(
             Card(
                 "SBI Card",
@@ -152,5 +150,5 @@ class MainActivity : AppCompatActivity() {
                 366
             )
         )
-    }
+    }*/
 }
