@@ -17,16 +17,6 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_card_information.cardNameTextView
-import kotlinx.android.synthetic.main.activity_card_information.cardNoCopyButton
-import kotlinx.android.synthetic.main.activity_card_information.cardNumberTextView
-import kotlinx.android.synthetic.main.activity_card_information.cvvCopyButton
-import kotlinx.android.synthetic.main.activity_card_information.cvvTextView
-import kotlinx.android.synthetic.main.activity_card_information.deleteButton
-import kotlinx.android.synthetic.main.activity_card_information.nameCopyButton
-import kotlinx.android.synthetic.main.activity_card_information.nameOnCardTextView
-import kotlinx.android.synthetic.main.activity_card_information.validFromTextView
-import kotlinx.android.synthetic.main.activity_card_information.validThruTextView
 import kotlinx.android.synthetic.main.card_information_activity_2.*
 import kotlinx.android.synthetic.main.editor_dialog.*
 import kotlinx.android.synthetic.main.grid_edit_dialog.*

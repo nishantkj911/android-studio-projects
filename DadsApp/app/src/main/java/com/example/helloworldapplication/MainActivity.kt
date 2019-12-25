@@ -5,9 +5,7 @@ import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.hardware.biometrics.BiometricPrompt
 import android.os.Bundle
-import android.os.CancellationSignal
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -35,7 +33,6 @@ class MainActivity : AppCompatActivity() {
 
         // opening the card page to show card information
         fab.setOnClickListener {
-            Toast.makeText(this, "Button Clicked", Toast.LENGTH_SHORT).show()
             startActivity(Intent(this, AddNewCardActivity::class.java))
         }
 
@@ -98,7 +95,7 @@ class MainActivity : AppCompatActivity() {
         rv.layoutManager = LinearLayoutManager(this)
     }
 
-    private fun biometricsAuthenticate() { // For API > 29
+    /*private fun biometricsAuthenticate() { // For API > 29
 
         val biometricPrompt = BiometricPrompt.Builder(this)
             .setTitle("Authentication Required")
@@ -127,7 +124,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
             })
-    }
+    }*/
 
     /*private fun initCards() {
         cards!!.add(
