@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.Serializable
 import java.util.*
+import kotlin.collections.ArrayList
 
 class Card : Serializable {
     var cardName: String? = null
@@ -55,10 +56,11 @@ fun loadData(context: Context) {
         AppCompatActivity.MODE_PRIVATE
     )
     val jsonString: String? = sp!!.getString(SHARED_PREF_ARRAYLIST_STRING, "")
-
-    MainActivity.cards = Gson().fromJson(jsonString, object : TypeToken<ArrayList<Card>>() {}.type)
-    if (MainActivity.cards == null)
+    if (jsonString.equals("")) {
         MainActivity.cards = ArrayList()
+    } else
+        MainActivity.cards =
+            Gson().fromJson(jsonString, object : TypeToken<ArrayList<Card>>() {}.type)
 }
 
 fun saveData(context: Context) {
